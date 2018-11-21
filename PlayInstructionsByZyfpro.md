@@ -50,9 +50,9 @@ def hello(name: String) = Action {
 ```
 
 And add a reference to the method in `conf/routes` :
-`GET  /hello        controllers.HomeController.hello(name: String)`
+`GET     /hello/:name        controllers.HomeController.hello(name: String)`
 
-This is all you need, load http://localhost:9000/hello?name=YourName to charge the page.
+This is all you need, load http://localhost:9000/hello/YourName to charge the page.
 
 #### 
 
