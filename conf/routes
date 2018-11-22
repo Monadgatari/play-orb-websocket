@@ -10,4 +10,8 @@ GET     /                           controllers.HomeController.index
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 # Hello world route
-GET     /hello/:name      controllers.HomeController.hello(name: String)
+GET     /hello/:name                controllers.HomeController.hello(name: String)
+
+# Counter routes
+GET     /counter                     controllers.CounterController.getCounter
+GET     /increment                   controllers.CounterController.incrementCounter
