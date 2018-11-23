@@ -94,6 +94,7 @@ slick.dbs.default.profile="slick.jdbc.PostgresProfile$"
 slick.dbs.default.db.dataSourceClass = "slick.jdbc.DatabaseUrlDataSource"
 slick.dbs.default.db.properties.driver = "org.postgresql.Driver"
 slick.dbs.default.db.properties.url="jdbc:postgresql://localhost:5432/playdb" # ?currentSchema=play"
+# Some additionnal options you might want/need :
 #play.evolutions.db.default.schema="play" # if you want to use a specific schema for evolution's table
 #slick.dbs.default.db.properties.user = "postgres"
 #slick.dbs.default.db.properties.password = ""
