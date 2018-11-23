@@ -183,6 +183,7 @@ Now, we can add some simple queries to the CounterRepository class that reads an
     } yield ()).transactionally
   }
 ```
+The first query is trivial but the second query is a bit more complex : The `forUpdate` and `transactionally` part are here to make sure the update is atomic.
 
 ### Create route to access/update the value
 Here, we'll need a controller that has access to the `CounterRepository` singleton class. For that, we'll create `app/controllers/CounterController.scala` and use injection :
