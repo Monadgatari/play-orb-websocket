@@ -1,6 +1,6 @@
 # Play example project
 ## Description
-Backend : Scala with Slick (PostreSQL/MariaDB), ...<br/>
+Backend : Scala with Slick (PostreSQL), ...<br/>
 Frontend : Typescript with ...<br/>
 Shared Libraries : SocketIO, ...<br/>
 Static : Sass + play html templates
@@ -23,7 +23,7 @@ now that you are in the sbt prompt, launch the app with :
 ```shell
 run
 ```
-The app will be compiled when you send a request if any file has changed since the last compilation. Alternatively, you can use the following to re-compile as soon as a file is saved (instead of waiting for a request) :
+It will download all the dependencies and might take some times at first. Then, the app will be compiled when you send a request if any file has changed since the last compilation. Alternatively, you can use the following to re-compile as soon as a file is saved (instead of waiting for a request) :
 ```shell
 ~run
 ```
@@ -94,6 +94,7 @@ slick.dbs.default.profile="slick.jdbc.PostgresProfile$"
 slick.dbs.default.db.dataSourceClass = "slick.jdbc.DatabaseUrlDataSource"
 slick.dbs.default.db.properties.driver = "org.postgresql.Driver"
 slick.dbs.default.db.properties.url="jdbc:postgresql://localhost:5432/playdb" # ?currentSchema=play"
+# Some additionnal options you might want/need :
 #play.evolutions.db.default.schema="play" # if you want to use a specific schema for evolution's table
 #slick.dbs.default.db.properties.user = "postgres"
 #slick.dbs.default.db.properties.password = ""
@@ -160,11 +161,12 @@ class CounterRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 }
 ```
 
-Here, it's probably the most complex part. Let me explain :
-- Due to the way depency injenction works, this has to be a Singleton class and not a scala object.
-The depency injection provides us with the database configuration needed.
+Here, it's probably the most complex looking part, but in fact, it's pretty simple. Let me explain :
+- The CounterRepository is the class that will "store" all the queries.
+- Due to the way dependency injenction works, this has to be a Singleton class and not a scala object.
+The dependency injection provides us with the database configuration needed.
 - The CounterTable class is a class that associates the table columns with the models values.
-- The columns are defined by functions that returns a column of some type given it's id and some options.
+- The columns are defined by functions that returns a column of some type given it's name and some options.
 - The * function provides the columns to scala model bi-directionnal convertion information
 - private val counters creates a starting point for database queries to this table.
 
@@ -182,6 +184,7 @@ Now, we can add some simple queries to the CounterRepository class that reads an
     } yield ()).transactionally
   }
 ```
+The first query is trivial but the second query is a bit more complex : The `forUpdate` and `transactionally` part are here to make sure the update is atomic.
 
 ### Create route to access/update the value
 Here, we'll need a controller that has access to the `CounterRepository` singleton class. For that, we'll create `app/controllers/CounterController.scala` and use injection :
@@ -195,12 +198,9 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 
-/**
-  * This controller creates an `Action` to handle HTTP requests to the
-  * application's home page.
-  */
 @Singleton
-class CounterController @Inject()(cr: CounterRepository, cc: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(cc) {
+class CounterController @Inject()(cr: CounterRepository, cc: ControllerComponents)(implicit ec: ExecutionContext)
+  extends AbstractController(cc) {
   def getCounter = Action.async { implicit request =>
     cr.getCounter.map(x =>
       Ok(views.html.hello(x.getOrElse(0).toString))
