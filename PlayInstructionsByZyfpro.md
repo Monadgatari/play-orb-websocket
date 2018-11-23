@@ -64,7 +64,7 @@ This is all you need, load http://localhost:9000/hello/YourName to charge the pa
 **TODO**
 
 ## Various optimisations :
-To add IntelliJ IDEA error hyperlinks, enter the following line in application.conf:
+To add IntelliJ IDEA error hyperlinks, enter the following line in `application.conf`:
 ```
 play.editor="http://localhost:63342/api/file/?file=%s&line=%s"
 ```
