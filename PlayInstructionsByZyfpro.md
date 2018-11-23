@@ -23,7 +23,7 @@ now that you are in the sbt prompt, launch the app with :
 ```shell
 run
 ```
-The app will be compiled when you send a request if any file has changed since the last compilation. Alternatively, you can use the following to re-compile as soon as a file is saved (instead of waiting for a request) :
+It will download all the dependencies and might take some times at first. Then, the app will be compiled when you send a request if any file has changed since the last compilation. Alternatively, you can use the following to re-compile as soon as a file is saved (instead of waiting for a request) :
 ```shell
 ~run
 ```
