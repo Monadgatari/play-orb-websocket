@@ -160,7 +160,7 @@ class CounterRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 }
 ```
 
-Here, it's probably the most complex part. Let me explain :
+Here, it's probably the most complex looking part, but in fact, it's pretty simple. Let me explain :
 - Due to the way depency injenction works, this has to be a Singleton class and not a scala object.
 The depency injection provides us with the database configuration needed.
 - The CounterTable class is a class that associates the table columns with the models values.
