@@ -197,7 +197,8 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CounterController @Inject()(cr: CounterRepository, cc: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(cc) {
+class CounterController @Inject()(cr: CounterRepository, cc: ControllerComponents)(implicit ec: ExecutionContext)
+  extends AbstractController(cc) {
   def getCounter = Action.async { implicit request =>
     cr.getCounter.map(x =>
       Ok(views.html.hello(x.getOrElse(0).toString))
