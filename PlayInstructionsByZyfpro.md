@@ -1,6 +1,6 @@
 # Play example project
 ## Description
-Backend : Scala with Slick (PostreSQL/MariaDB), ...<br/>
+Backend : Scala with Slick (PostreSQL), ...<br/>
 Frontend : Typescript with ...<br/>
 Shared Libraries : SocketIO, ...<br/>
 Static : Sass + play html templates
