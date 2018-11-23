@@ -16,13 +16,13 @@ class CounterController @Inject()(cr: CounterRepository, cc: ControllerComponent
 
   def getCounter = Action.async { implicit request =>
     cr.getCounter.map(x =>
-      Ok(views.html.hello(x.toString))
+      Ok(views.html.hello(x.getOrElse(0).toString))
     )
   }
 
   def incrementCounter = Action.async { implicit request =>
     cr.incrementCounter.flatMap(_ => cr.getCounter).map(x =>
-      Ok(views.html.hello(x.toString))
+      Ok(views.html.hello(x.getOrElse(0).toString))
     )
   }
 }

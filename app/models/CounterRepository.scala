@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CounterRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -22,17 +22,14 @@ class CounterRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
   private val counters = TableQuery[CounterTable]
 
-  def getCounter = db.run {
-    for {
-      xs <- counters.filter(_.id === 1L).map(_.x).result
-    } yield xs.head
-
+  def getCounter: Future[Option[Int]] = db.run {
+      counters.filter(_.id === 1L).map(_.x).result.headOption
   }
 
-  def incrementCounter = db.run {
+  def incrementCounter: Future[Unit] = db.run {
     val q = counters.filter(_.id === 1L).map(_.x)
     (for {
-      xs <- q.forUpdate.result
+      xs <- q.forUpdate.result if xs.nonEmpty
       _ <- q.update(xs.head + 1)
     } yield ()).transactionally
   }
